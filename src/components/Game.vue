@@ -27,9 +27,7 @@ export default {
           x: 0,
           y: 0,
           z: 0,
-          countdown: 0,
-          timeout: {},
-          interval: {}
+          countdown: 0
       }
   },
   methods: {
@@ -51,18 +49,13 @@ export default {
           this.countdown = 100
 
           if(!start) {
-            this.interval = setInterval(() => { this.countdown = this.countdown > 0 ? this.countdown - 15 : 0 }, 100)
-            this.timeout = setTimeout(this.gameOver, 1500);
+            
           }
       },
       gameOver() {
-          this.countdown = 0
-          clearInterval(this.interval)
-          clearTimeout(this.timeout)
+          
       },
       choiceTrue() {
-          if(this.countdown <= 0)
-            return
           if(this.z === (this.x + this.y)) {
               this.score++;
               this.initGame(false);
@@ -72,8 +65,6 @@ export default {
           }
       },
       choiceFalse() {
-        if(this.countdown <= 0)
-            return
         if(this.z !== (this.x + this.y)) {
             this.score++;
             this.initGame(false);
