@@ -1,5 +1,8 @@
 # vuemath
 
+## Screenshot
+![alt text](https://raw.githubusercontent.com/oaltena/vuemath/master/public/vuemath-screenshot.png "App Screenshot")
+
 ## Project setup
 ```
 npm install
