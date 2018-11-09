@@ -6,11 +6,12 @@
             text-variant="white">
         <h6 slot="header" class="mb-0">Score: {{ score }}</h6>
         <div style="font-size:2em">
-            <p>{{ this.x }} + {{ this.y }}</p>
-            <p>= {{ this.z }}</p>
+            <p>{{ this.x }} {{ this.operator }} {{ this.y }}</p>
+            <p>{{ this.equals }} {{ this.z }}</p>
+            <p>{{ this.message }}</p>
         </div>
         <div slot="footer">
-        <b-progress show-progress animated :value="countdown"></b-progress><br/>
+        <b-progress :animated="animate" :value="countdown"></b-progress><br/>
         <b-button variant="success lg" class="btnChoice" v-on:click="choiceTrue()">✔</b-button>&nbsp;
         <b-button variant="danger lg" class="btnChoice" v-on:click="choiceFalse()">X</b-button>
         </div>
@@ -27,7 +28,13 @@ export default {
           x: 0,
           y: 0,
           z: 0,
-          countdown: 0
+          operator: '+',
+          equals: '=',
+          countdown: 0,
+          interval: 0,
+          animate: false,
+          message: '',
+          mode: ''
       }
   },
   methods: {
@@ -47,30 +54,47 @@ export default {
 
           this.z = result
           this.countdown = 100
-
           if(!start) {
-            
+              if(!this.interval) {
+                this.animate = true
+                this.interval = setInterval(() => {
+                    if(this.countdown == 0) {
+                        this.gameOver()
+                        return
+                    }
+                    this.countdown = this.countdown - 20
+                }, 200)
+              }
           }
       },
       gameOver() {
-          
+          clearInterval(this.interval)
+          this.x = ''
+          this.y = ''
+          this.z = ''
+          this.operator = ''
+          this.equals = ''
+          this.message = 'GAME OVER'
+          this.mode = 'GAME_OVER'
       },
       choiceTrue() {
+          if(this.mode == 'GAME_OVER')
+            return
           if(this.z === (this.x + this.y)) {
-              this.score++;
+              this.score++
               this.initGame(false);
           } else {
-              this.score--;
-              this.initGame(false);
+              this.gameOver()
           }
       },
       choiceFalse() {
+        if(this.mode == 'GAME_OVER')
+            return
         if(this.z !== (this.x + this.y)) {
             this.score++;
             this.initGame(false);
         } else {
-            this.score--;
-            this.initGame(false);
+            this.gameOver()
         }
       }
   },
